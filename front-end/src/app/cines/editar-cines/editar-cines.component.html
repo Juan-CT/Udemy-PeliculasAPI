@@ -1,0 +1,12 @@
+
+<h2>Editar Cine</h2>
+
+<app-formulario-cines
+*ngIf="modelo"
+[modelo]="modelo"
+(onSubmit)="guardarCambios($event)"
+[errores]="errores"
+>
+</app-formulario-cines>
+
+<mat-spinner *ngIf="!modelo"></mat-spinner>

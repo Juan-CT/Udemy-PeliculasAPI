@@ -1,0 +1,12 @@
+
+<h2>Crear Película</h2>
+
+<app-formulario-peliculas
+*ngIf="cinesNoSeleccionados"
+[generosNoSeleccionados]="generosNoSeleccionados"
+[cinesNoSeleccionados]="cinesNoSeleccionados"
+(onSubmit)="guardarCambios($event)"
+
+></app-formulario-peliculas>
+
+<mat-spinner *ngIf="!cinesNoSeleccionados"></mat-spinner>

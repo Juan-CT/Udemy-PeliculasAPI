@@ -1,0 +1,47 @@
+# --- Backend .NET Core ---
+# Ignorar carpetas de publicación y compilación
+bin/
+obj/
+
+# Archivos de usuario y configuración local
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de entorno locales
+.env
+
+# Archivos de configuración de VS Code
+.vscode/
+
+# Archivos de configuración de Rider
+.idea/
+*.sln.iml
+
+# Archivos generados por NuGet
+*.nupkg
+*.snupkg
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Archivos de logs y temporales
+*.log
+*.temp
+
+# --- Frontend (Angular) ---
+# Ignorar node_modules (dependencias de Node.js)
+front-end/node_modules/
+
+# Ignorar compilados de TypeScript, si aplica
+front-end/dist/
+front-end/build/
+
+# Archivos de entorno locales del cliente
+front-end/.env
+
+# Ignorar archivos de lock de npm o yarn (opcional si deseas versionarlos)
+front-end/package-lock.json
+front-end/yarn.lock

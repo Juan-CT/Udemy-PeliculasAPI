@@ -2,6 +2,11 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { generoDTO } from 'src/app/generos/genero';
+import { GenerosService } from '../../generos/generos.service';
+import { PeliculasService } from '../peliculas.service';
+import { PeliculaDTO } from '../pelicula';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-filtro-peliculas',
@@ -10,42 +15,45 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class FiltroPeliculasComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private location: Location, private activatedRoute: ActivatedRoute) { }
+  constructor(private formBuilder: FormBuilder,
+    private location: Location,
+    private activatedRoute: ActivatedRoute,
+    private generosService: GenerosService,
+    private peliculasService: PeliculasService) { }
 
   form: FormGroup;
 
-  generos = [
-    { id: 1, nombre: 'Drama' },
-    { id: 2, nombre: 'Acción' },
-    { id: 3, nombre: 'Comedia' },
-  ];
+  generos: generoDTO[] = [];
 
-  peliculas = [
-    { titulo: 'Dune', enCines: false, proximosEstrenos: true, generos: [1, 2], poster: 'https://posterspy.com/wp-content/uploads/2021/09/dune-movie-psoter-art-scaled.jpg' },
-    { titulo: 'Matrix', enCines: true, proximosEstrenos: false, generos: [1, 2], poster: 'https://picfiles.alphacoders.com/385/385304.jpg' },
-    { titulo: 'Inception', enCines: false, proximosEstrenos: false, generos: [1], poster: 'https://posterspy.com/wp-content/uploads/2020/07/Inception_10th_Anniversary_Poster.jpg' },
-  ]
+  peliculas: PeliculaDTO[];
 
-  peliculasOriginal = this.peliculas;
+  paginaActual = 1;
+  cantidadElementosAMostrar = 10;
+  cantidadElementos;
 
   formOriginal = {
-    titulo: '',
+    nombre: '',
     generoId: 0,
     proximosEstrenos: false,
     enCines: false
   };
 
   ngOnInit(): void {
-    this.form = this.formBuilder.group(this.formOriginal);
-    this.leerValoresURL();
-    this.buscarPeliculas(this.form.value);
+    this.generosService.obtenerTodos().subscribe(generos => {
+        this.generos = generos;
 
-    this.form.valueChanges
-      .subscribe(valores => {
-        this.peliculas = this.peliculasOriginal;
-        this.buscarPeliculas(valores);
-        this.escribirParamsBusquedaEnUrl();
+        this.form = this.formBuilder.group(this.formOriginal);
+        this.leerValoresURL();
+        this.buscarPeliculas(this.form.value);
+
+        this.form.valueChanges
+          .subscribe(valores => {
+            this.buscarPeliculas(valores);
+            this.escribirParamsBusquedaEnUrl();
+          })
       })
+
+
   }
 
   private escribirParamsBusquedaEnUrl(): void {
@@ -65,8 +73,8 @@ export class FiltroPeliculasComponent implements OnInit {
       queryStrings.push(`generoId=${valoresForm.generoId}`);
     }
 
-    if (valoresForm.titulo) {
-      queryStrings.push(`titulo=${valoresForm.titulo}`);
+    if (valoresForm.nombre) {
+      queryStrings.push(`nombre=${valoresForm.nombre}`);
     }
 
     this.location.replaceState('peliculas/buscar', queryStrings.join('&'));
@@ -76,8 +84,8 @@ export class FiltroPeliculasComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params) => {
       const objeto: any = {};
 
-      if (params.titulo) {
-        objeto.titulo = params.titulo;
+      if (params.nombre) {
+        objeto.nombre = params.nombre;
       }
 
       if (params.generoID) {
@@ -97,24 +105,23 @@ export class FiltroPeliculasComponent implements OnInit {
   }
 
   buscarPeliculas(valores: any) {
-    if (valores.titulo) {
-      this.peliculas = this.peliculas.filter(pelicula => pelicula.titulo.indexOf(valores.titulo) !== -1);
-    }
+    valores.pagina = this.paginaActual;
+    valores.recordsPorPagina = this.cantidadElementosAMostrar;
+    this.peliculasService.filtrar(valores).subscribe(response => {
+      this.peliculas = response.body;
+      this.escribirParamsBusquedaEnUrl();
+      this.cantidadElementos = response.headers.get('cantidadTotalRegistros');
+    })
 
-    if (valores.generoId !== 0) {
-      this.peliculas = this.peliculas.filter(pelicula => pelicula.generos.indexOf(valores.generoId) !== -1);
-    }
-
-    if (valores.proximosEstrenos) {
-      this.peliculas = this.peliculas.filter(pelicula => pelicula.proximosEstrenos);
-    }
-
-    if (valores.enCines) {
-      this.peliculas = this.peliculas.filter(pelicula => pelicula.enCines);
-    }
   }
 
   limpiar() {
     this.form.patchValue(this.formOriginal);
+  }
+
+  paginatorUpdate(datos: PageEvent) {
+    this.paginaActual = datos.pageIndex + 1;
+    this.cantidadElementosAMostrar = datos.pageSize;
+    this.buscarPeliculas(this.form.value);
   }
 }

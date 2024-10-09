@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PeliculasService } from '../peliculas/peliculas.service';
+import { PeliculaDTO } from '../peliculas/pelicula';
 
 @Component({
   selector: 'app-landing-page',
@@ -7,10 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private peliculasService: PeliculasService) { }
 
+  peliculasenCines: PeliculaDTO[] = [];
+  peliculasProximosEstrenos: PeliculaDTO[] = [];
 
   ngOnInit(): void {
+    this.cargarDatos();
   }
 
+  cargarDatos() {
+    this.peliculasService.obtenerLandingPage().subscribe(landingPage => {
+      this.peliculasenCines = landingPage.enCines;
+      this.peliculasProximosEstrenos = landingPage.proximosEstrenos;
+    });
+  }
+
+  borrado() {
+    this.cargarDatos();
+  }
 }

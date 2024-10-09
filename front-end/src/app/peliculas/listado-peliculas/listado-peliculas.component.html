@@ -6,17 +6,19 @@
 
       <div *ngFor="let pelicula of peliculas; let index = index" class="pelicula-contenedor">
 
-        <a>
+        <a [routerLink]="'/peliculas/' + pelicula.id">
           <img [src]="pelicula.poster" alt="Poster">
         </a>
 
         <p>
-          <a>{{pelicula.titulo}}</a>
+          <a [routerLink]="'/peliculas/' + pelicula.id">{{pelicula.nombre}}</a>
         </p>
 
         <div>
-          <a mat-flat-button color="primary">Editar</a>
-          <button mat-flat-button color="warn" type="button">Borrar</button>
+          <a mat-flat-button color="primary" [routerLink]="'/peliculas/editar/' + pelicula.id">Editar</a>
+          <button mat-flat-button color="warn" type="button"
+          [swal]="{title: 'Confirmación', text: 'Borrar registro, Confirmar', showCancelButton: true}"
+          (confirm)="borrar(pelicula.id)">Borrar</button>
         </div>
 
 

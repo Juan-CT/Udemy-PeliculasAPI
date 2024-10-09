@@ -3,6 +3,7 @@
 
 <app-formulario-peliculas
 *ngIf="cinesNoSeleccionados"
+[errores]="errores"
 [generosNoSeleccionados]="generosNoSeleccionados"
 [cinesNoSeleccionados]="cinesNoSeleccionados"
 (onSubmit)="guardarCambios($event)"

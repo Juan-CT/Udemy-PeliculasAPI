@@ -13,6 +13,7 @@ import { EditarGeneroComponent } from './generos/editar-genero/editar-genero.com
 import { EditarCinesComponent } from './cines/editar-cines/editar-cines.component';
 import { EditarPeliculasComponent } from './peliculas/editar-peliculas/editar-peliculas.component';
 import { FiltroPeliculasComponent } from './peliculas/filtro-peliculas/filtro-peliculas.component';
+import { DetallePeliculaComponent } from './peliculas/detalle-pelicula/detalle-pelicula.component';
 
 const routes: Routes = [
   {
@@ -70,6 +71,10 @@ const routes: Routes = [
   {
     path: 'peliculas/buscar',
     component: FiltroPeliculasComponent
+  },
+  {
+    path: 'peliculas/:id',
+    component: DetallePeliculaComponent
   },
   {
     path: '**',

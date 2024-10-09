@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { actorCreacionDTO, actorDTO } from '../actor';
+import { actorCreacionDTO, actorDTO, actorPeliculaDTO } from '../actor';
 
 @Component({
   selector: 'app-formulario-actores',

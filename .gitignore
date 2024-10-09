@@ -11,6 +11,7 @@ obj/
 
 # Archivos de entorno locales
 .env
+.vs/
 
 # Archivos de configuración de VS Code
 .vscode/

@@ -1,7 +1,7 @@
 <h2>En cines</h2>
 
-<app-listado-peliculas ></app-listado-peliculas>
+<app-listado-peliculas (borrado)="borrado()" [peliculas]="peliculasenCines"></app-listado-peliculas>
 
 <h2>Futuros estrenos</h2>
 
-<app-listado-peliculas ></app-listado-peliculas>
+<app-listado-peliculas (borrado)="borrado()" [peliculas]="peliculasProximosEstrenos"></app-listado-peliculas>

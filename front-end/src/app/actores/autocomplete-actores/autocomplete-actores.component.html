@@ -5,7 +5,7 @@
 
   <mat-autocomplete #auto (optionSelected)="optionSelected($event)">
 
-    <mat-option *ngFor="let opcion of actores" [value]="opcion">
+    <mat-option *ngFor="let opcion of actoresAMostrar" [value]="opcion">
       <img [src]="opcion.foto" alt="Pepe" />
       {{opcion.nombre}}
     </mat-option>
@@ -14,7 +14,7 @@
 
 </form>
 
-<table *ngIf="actoresSeleccionados.length > 0" mat-table [dataSource]="actoresSeleccionados" class="mat-elevation-z8"
+<table *ngIf="actoresSeleccionados && actoresSeleccionados.length > 0" mat-table [dataSource]="actoresSeleccionados" class="mat-elevation-z8"
   cdkDropList [cdkDropListData]="actoresSeleccionados" (cdkDropListDropped)="finalizaArrastre($event)">
 
   <ng-container matColumnDef="imagen">
